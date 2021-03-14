@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="resume"
+            type="com.school.project.bean.ResumeEntity" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_background"
+        android:onClick="@{(v)->resume.goEdit(v)}"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{resume.nameText}"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{resume.timeText}"
+            android:textColor="@color/text_color_grey"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{resume.jobNameText}"
+            android:textColor="@color/text_color_grey"
+            android:textSize="15sp"
+            android:visibility="@{resume.visible}" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{resume.descText}"
+            android:textColor="@color/text_color_grey"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+</layout>
