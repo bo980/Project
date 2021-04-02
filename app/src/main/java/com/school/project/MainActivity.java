@@ -13,7 +13,7 @@ import com.school.project.user.UserStatus;
 import com.school.project.utils.SharedPreferencesUtils;
 
 public class MainActivity extends BaseActivity {
-    private static final long MILLIS_IN_FUTURE = 2000L;
+    private static final long MILLIS_IN_FUTURE = 5000L;
     private static final long COUNTDOWN_INTERVAL = 1000L;
     private CountDownTimer mCountDownTimer;
     public ObservableField<String> mCountDownFinished = new ObservableField<>();
