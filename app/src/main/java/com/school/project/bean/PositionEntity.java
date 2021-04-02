@@ -7,9 +7,13 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.school.project.database.AppDatabase;
 import com.school.project.position.PositionDetailsActivity;
 import com.school.project.position.PositionEditActivity;
-import com.school.project.resume.ResumeEditActivity;
+
+import io.reactivex.Completable;
+import io.reactivex.functions.Action;
+import io.reactivex.schedulers.Schedulers;
 
 @Entity(tableName = "position")
 public class PositionEntity {
@@ -52,5 +56,14 @@ public class PositionEntity {
             view.getContext().startActivity(new Intent(view.getContext(), PositionDetailsActivity.class)
                     .putExtra("pid", pid));
         }
+    }
+
+    public void delete() {
+        Completable.fromAction(new Action() {
+            @Override
+            public void run() {
+                AppDatabase.get().positionDao().delete(PositionEntity.this);
+            }
+        }).subscribeOn(Schedulers.io()).subscribe();
     }
 }

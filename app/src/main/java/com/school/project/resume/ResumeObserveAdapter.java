@@ -32,10 +32,12 @@ import com.school.project.R;
 import com.school.project.bean.ResumeEntity;
 import com.school.project.databinding.LayoutJobItemBinding;
 import com.school.project.databinding.LayoutSkillItemBinding;
+import com.school.project.utils.DialogUtils;
 
 public class ResumeObserveAdapter extends PagedListAdapter<ResumeEntity, ResumeObserveAdapter.ResumeViewHolder> {
 
     private boolean mIsItemEnable;
+
     public ResumeObserveAdapter(boolean isItemEnable) {
         super(new DiffUtil.ItemCallback<ResumeEntity>() {
             @Override
@@ -56,11 +58,11 @@ public class ResumeObserveAdapter extends PagedListAdapter<ResumeEntity, ResumeO
     public ResumeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == ResumeEntity.TYPE_SKILL) {
             LayoutSkillItemBinding viewDataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                    R.layout.layout_skill_item, parent, false);
+                R.layout.layout_skill_item, parent, false);
             return new ResumeViewHolder(viewDataBinding.getRoot());
         } else {
             LayoutJobItemBinding viewDataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
-                    R.layout.layout_job_item, parent, false);
+                R.layout.layout_job_item, parent, false);
             return new ResumeViewHolder(viewDataBinding.getRoot());
         }
     }
@@ -68,13 +70,28 @@ public class ResumeObserveAdapter extends PagedListAdapter<ResumeEntity, ResumeO
     @Override
     public void onBindViewHolder(ResumeViewHolder holder, int position) {
         ViewDataBinding viewDataBinding = DataBindingUtil.getBinding(holder.itemView);
-        getItem(position).isEnable = mIsItemEnable;
+        final ResumeEntity item = getItem(position);
+        item.isEnable = mIsItemEnable;
         if (viewDataBinding instanceof LayoutSkillItemBinding) {
             ((LayoutSkillItemBinding) viewDataBinding).setResume(getItem(position));
         }
         if (viewDataBinding instanceof LayoutJobItemBinding) {
             ((LayoutJobItemBinding) viewDataBinding).setResume(getItem(position));
         }
+        viewDataBinding.getRoot().setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(final View v) {
+                if (item.isEnable) {
+                    DialogUtils.showNormalDialog(v.getContext(), "是否删除？", new DialogUtils.OnAppDialogListener() {
+                        @Override
+                        public void onCommit() {
+                            item.delete();
+                        }
+                    });
+                }
+                return false;
+            }
+        });
         viewDataBinding.executePendingBindings();
     }
 

@@ -30,7 +30,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.school.project.R;
 import com.school.project.bean.PositionEntity;
+import com.school.project.databinding.LayoutMessageItemBinding;
 import com.school.project.databinding.LayoutPositionItemBinding;
+import com.school.project.utils.DialogUtils;
 
 public class PositionObserveAdapter extends PagedListAdapter<PositionEntity, PositionObserveAdapter.ResumeViewHolder> {
 
@@ -64,9 +66,25 @@ public class PositionObserveAdapter extends PagedListAdapter<PositionEntity, Pos
         ViewDataBinding viewDataBinding = DataBindingUtil.getBinding(holder.itemView);
         getItem(position).isEnable = mIsItemEnable;
         if (viewDataBinding instanceof LayoutPositionItemBinding) {
-            ((LayoutPositionItemBinding) viewDataBinding).setPosition(getItem(position));
+            final LayoutPositionItemBinding itemBinding = (LayoutPositionItemBinding) viewDataBinding;
+            itemBinding.setPosition(getItem(position));
+            itemBinding.getRoot().setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(final View v) {
+                    final LayoutPositionItemBinding itemBinding = DataBindingUtil.getBinding(v);
+                    if (itemBinding.getPosition().isEnable) {
+                        DialogUtils.showNormalDialog(v.getContext(), "是否删除此条职位？", new DialogUtils.OnAppDialogListener() {
+                            @Override
+                            public void onCommit() {
+                                itemBinding.getPosition().delete();
+                            }
+                        });
+                    }
+                    return false;
+                }
+            });
+            viewDataBinding.executePendingBindings();
         }
-        viewDataBinding.executePendingBindings();
     }
 
     static class ResumeViewHolder extends RecyclerView.ViewHolder {

@@ -8,8 +8,13 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.school.project.database.AppDatabase;
 import com.school.project.resume.ResumeEditActivity;
 import com.school.project.utils.DateUtils;
+
+import io.reactivex.Completable;
+import io.reactivex.functions.Action;
+import io.reactivex.schedulers.Schedulers;
 
 @Entity(tableName = "resume")
 public class ResumeEntity {
@@ -75,5 +80,14 @@ public class ResumeEntity {
             view.getContext().startActivity(new Intent(view.getContext(), ResumeEditActivity.class)
                     .putExtra("rid", rid).putExtra("type", ResumeEntity.TYPE_JOB));
         }
+    }
+
+    public void delete() {
+        Completable.fromAction(new Action() {
+            @Override
+            public void run() {
+                AppDatabase.get().resumeDao().delete(ResumeEntity.this);
+            }
+        }).subscribeOn(Schedulers.io()).subscribe();
     }
 }
